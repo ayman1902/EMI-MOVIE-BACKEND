@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Commentaire")
+@CrossOrigin(origins = "*")
 public class ControllerCommentaire {
     private final ServiceCommentaire serviceCommentaire;
     @Autowired

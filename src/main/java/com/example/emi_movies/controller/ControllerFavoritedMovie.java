@@ -14,47 +14,44 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/Favoris")
+@CrossOrigin(origins = "*")
 public class ControllerFavoritedMovie {
     private final ServiceFavoritedMovie serviceFavoritedMovie;
     @Autowired
     public ControllerFavoritedMovie(ServiceFavoritedMovie serviceFavoritedMovie) {
         this.serviceFavoritedMovie = serviceFavoritedMovie;
     }
-    @GetMapping("/favorited")
+    @GetMapping("/favorite")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<List<FavoritedMovie>> getAllCommentaire(){
-        List<FavoritedMovie> favoritedMovies = serviceFavoritedMovie.findAllFavoris();
-        return new ResponseEntity<>(favoritedMovies, HttpStatus.OK);
+
+    public ResponseEntity<List<FavoritedMovie>> getFavoriteMovieIds() {
+        List<FavoritedMovie> favoriteMovieIds = serviceFavoritedMovie.getFavoriteMovie();
+        return ResponseEntity.ok(favoriteMovieIds);
     }
+
+    @PostMapping("/add/{movieId}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
+    public ResponseEntity<?> addFavoriteMovie(@RequestBody FavoritedMovie favoriteMovies,
+                                              @PathVariable("movieId") Long movieId) {
+        favoriteMovies.setIdfilm(movieId);
+        serviceFavoritedMovie.addFavoriteMovie(favoriteMovies);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<FavoritedMovie> addFavoris(@RequestBody FavoritedMovie favoritedMovie){
-        FavoritedMovie favoritedMovieAdd= serviceFavoritedMovie.addFavoris(favoritedMovie);
-        return new ResponseEntity<>(favoritedMovieAdd, HttpStatus.CREATED);
+    public ResponseEntity<?> addFavoriteMovieraw(@RequestBody FavoritedMovie favoriteMovies) {
+        serviceFavoritedMovie.addFavoriteMovie(favoriteMovies);
+        return ResponseEntity.ok().build();
     }
-    @PutMapping("/update")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<FavoritedMovie> updateFavoris(@RequestBody FavoritedMovie favoritedMovie){
-        FavoritedMovie favoritedMovieupdated = serviceFavoritedMovie.updateFavoris(favoritedMovie);
-        return new ResponseEntity<>(favoritedMovieupdated, HttpStatus.OK);
-    }
+
+
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<?> deleteFavoris(@PathVariable("id") Long id) {
-        serviceFavoritedMovie.deleteFavoris(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteFavoriteMovie(@PathVariable("id") Long id) {
+        serviceFavoritedMovie.deleteFavoriteMovie(id);
+        return ResponseEntity.ok().build();
     }
-    @DeleteMapping("/deleteByIdFilm/{idfilm}")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<?> deleteFavorisByIdFilm(@PathVariable("idfilm") Long idfilm) {
-        serviceFavoritedMovie.deleteFavorisByfilmId(idfilm);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-    @GetMapping("/find/{idfilm}")
-    @PreAuthorize("hasAuthority('SCOPE_USER')")
-    public ResponseEntity<List<FavoritedMovie>> getFavorisById(@PathVariable("idfilm") Long idfilm){
-        List<FavoritedMovie> favoritedMovieCommentaireByIdFilm= serviceFavoritedMovie.findFavorisByIdFilm(idfilm);
-        return new ResponseEntity<>(favoritedMovieCommentaireByIdFilm, HttpStatus.OK);
-    }
+
 
 }

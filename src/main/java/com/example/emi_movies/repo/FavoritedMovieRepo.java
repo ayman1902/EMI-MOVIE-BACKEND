@@ -11,13 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface FavoritedMovieRepo extends JpaRepository<FavoritedMovie,Long> {
-    @Query("SELECT f FROM FavoritedMovie f WHERE f.idfilm = :idfilm")
-    List<FavoritedMovie> findFavorisById_film(Long idfilm);
-    @Modifying
-    @Query("DELETE FROM FavoritedMovie f WHERE f.idfilm = :idfilm")
-    @Transactional
-    void deleteFavorisByIdFilm(@Param("idfilm") Long idfilm);
-    /*
-    @Query("UPDATE FavoritedMovie f SET f.favorited = :favorited WHERE f.idfilm = :idfilm")
-    void updateFavorisByIdFilm(@Param("favorited") boolean favorited, @Param("idFilm") Long idfilm);*/
+    FavoritedMovie findByIdfilm(Long idfilm);
+
 }

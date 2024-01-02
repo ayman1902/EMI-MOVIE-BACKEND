@@ -14,13 +14,25 @@ public class FavoritedMovie {
     @Column(nullable = false)
     private boolean favorited;
 
+    //@Column(nullable = false)
+    private String username;
+
     public FavoritedMovie() {
     }
 
-    public FavoritedMovie(Long id, Long idfilm, boolean favorited) {
+    public FavoritedMovie(Long id, Long idfilm, boolean favorited,String username) {
         this.id = id;
         this.idfilm = idfilm;
         this.favorited = favorited;
+        this.username=username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {

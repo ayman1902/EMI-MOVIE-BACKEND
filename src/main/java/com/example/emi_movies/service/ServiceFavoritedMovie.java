@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceFavoritedMovie {
@@ -15,25 +16,21 @@ public class ServiceFavoritedMovie {
     public ServiceFavoritedMovie(FavoritedMovieRepo favoritedMovieRepo) {
         this.favoritedMovieRepo = favoritedMovieRepo;
     }
-    public FavoritedMovie addFavoris(FavoritedMovie favoritedMovie){
-        return favoritedMovieRepo.save(favoritedMovie);
-    }
-    public List<FavoritedMovie> findAllFavoris(){
+    public List<FavoritedMovie> getFavoriteMovie() {
         return favoritedMovieRepo.findAll();
     }
 
-    public void deleteFavoris(Long id){
-        favoritedMovieRepo.deleteById(id);
-    }
-    public void deleteFavorisByfilmId(Long idFilm){
-        favoritedMovieRepo.deleteFavorisByIdFilm(idFilm);
-    }
-    public List<FavoritedMovie> findFavorisByIdFilm(Long idfilm){
-        return (List<FavoritedMovie>) favoritedMovieRepo.findFavorisById_film(idfilm);
 
+    public FavoritedMovie addFavoriteMovie(FavoritedMovie favoriteMovies) {
+        return favoritedMovieRepo.save(favoriteMovies);
     }
 
-    public FavoritedMovie updateFavoris(FavoritedMovie favoritedMovie) {
-        return favoritedMovieRepo.save(favoritedMovie);
+    public void deleteFavoriteMovie(Long idfilm) {
+        // Find the FavoriteMovies entity by movieId and delete it if it exists
+        FavoritedMovie favoriteMovie = favoritedMovieRepo.findByIdfilm(idfilm);
+        if (favoriteMovie != null) {
+            favoritedMovieRepo.delete(favoriteMovie);
+        } else {
+        }
     }
 }
